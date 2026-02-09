@@ -95,11 +95,20 @@
             setTimeout(() => heart.remove(), duration * 1000);
         }
 
-        window.onclick = function() {
+        function initAudio() {
             const hb = document.getElementById('heartbeatSound');
-            if (hb && hb.paused) { hb.play().catch(e => console.warn("Чекаємо кліку")); }
-            window.onclick = null; 
-        };
+            if (hb && hb.paused) {
+                hb.play().then(() => {
+                    console.log("Звук серця запущено!");
+                }).catch(err => {
+                    console.warn("Браузер все ще блокує звук:", err);
+                });
+            }
+            window.removeEventListener('click', initAudio);
+            window.removeEventListener('touchstart', initAudio);
+        }
+        window.addEventListener('click', initAudio);
+        window.addEventListener('touchstart', initAudio);
 
         function openValentine() {
             const hb = document.getElementById('heartbeatSound');
